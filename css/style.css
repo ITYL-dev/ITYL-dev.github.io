@@ -1,0 +1,27 @@
+body {
+    font-family: "Roboto Mono", sans-serif;
+    background-color: black;
+    padding-top: 1vh;
+    padding-bottom: 2vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
+
+#asteroids {
+    border: 1px solid white;
+    width: 96vw;
+    height: 77vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    padding: 1%;
+}
+
+header .header {
+    flex: 1;
+    font-size: xx-large;
+    text-align: center;
+    color: white;
+}
