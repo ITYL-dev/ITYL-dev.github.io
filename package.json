@@ -1,0 +1,10 @@
+{
+  "name": "ityl-dev.github.io",
+  "version": "1.0.0",
+  "description": "About me",
+  "author": "Baptiste Grignon",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.44.0"
+  }
+}
