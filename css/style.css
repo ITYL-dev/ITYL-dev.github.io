@@ -1,27 +1,52 @@
 body {
     font-family: "Roboto Mono", sans-serif;
     background-color: black;
-    padding-top: 1vh;
-    padding-bottom: 2vh;
-    padding-left: 2vw;
-    padding-right: 2vw;
 }
 
 #asteroids {
     border: 1px solid white;
     width: 96vw;
-    height: 77vh;
+    height: 80vh;
+}
+
+main {
+    padding-left: 2vw;
+    padding-right: 2vw;
 }
 
 header {
+    height: 9vh;
     display: flex;
     justify-content: space-around;
-    padding: 1%;
+    align-items: center;
+    padding-bottom: 2vh;
 }
 
-header .header {
+footer {
+    height: 8vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.child {
     flex: 1;
-    font-size: xx-large;
     text-align: center;
     color: white;
+}
+
+h1 {
+    font-size: xx-large;
+}
+
+h2 {
+    font-size: x-large
+}
+
+h3 {
+    font-size: larger;
+}
+
+h4 {
+    font-size: large;
 }
