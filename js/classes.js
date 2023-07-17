@@ -5,11 +5,27 @@ class Vector2D {
 		this.y = y;
 	}
 
-	sub(vector2D) {
-		const newV = new Vector2D();
-		newV.x = this.x - vector2D.x;
-		newV.y = this.y - vector2D.y;
+	add(vector2D) {
+		const newV = new Vector2D(0,0);
+		newV.x = this.x + vector2D.x;
+		newV.y = this.y + vector2D.y;
 		return newV;
+	}
+
+	multiply(n) {
+		const newV = new Vector2D(0,0);
+		newV.x = this.x * n;
+		newV.y = this.y * n;
+		return newV;
+	}
+
+	norm() {
+		return Math.sqrt(this.x * this.x + this.y * this.y);
+	}
+
+	unit() {
+		const copyV = new Vector2D(this.x,this.y);
+		return copyV.multiply(1/this.norm());
 	}
 }
 
@@ -31,9 +47,13 @@ class RotationMatrix2D {
 }
 
 class Solid2D {
-	constructor(x,y) {
+	constructor(x ,y, m, d) {
 		this.origin = new Vector2D(x, y);
 		this.vectors = [];
+		this.speedVector = new Vector2D(0,0);
+		this.mass = m;
+		this.drag = d;
+		this.totalRotation = 0;
 	}
 
 	addPoint(x,y,toDraw=true) {
@@ -42,11 +62,23 @@ class Solid2D {
 
 	rotate(theta) {
 		const alpha = theta * Math.PI / 180;
+		this.totalRotation = this.totalRotation + alpha;
 		this.vectors = this.vectors.map(([vector, toDraw]) => {
 			const matrix = new RotationMatrix2D(alpha);
 			const newV = matrix.dot(vector);
 			return [newV, toDraw];
 		});
+	}
+
+	move(dT, F=0) {
+		if (this.vectors.length > 0) {
+			const thrustVector = this.vectors[0][0].unit().multiply(F);
+			this.speedVector.x = this.speedVector.x + dT * (thrustVector.x - this.drag * this.speedVector.x);
+			this.speedVector.y = this.speedVector.y + dT * (thrustVector.y - this.drag * this.speedVector.y);
+			this.origin = this.origin.add(this.speedVector);
+		} else {
+			throw new Error("No first vector to indicate the way forward");
+		}
 	}
 
 	drawSolid(ctx) {
@@ -63,8 +95,8 @@ class Solid2D {
 }
 
 class Rocket extends Solid2D {
-	constructor(x, y, L=30, theta=15) {
-		super(x, y);
+	constructor(x, y, m=1000, d=1, L=30, theta=15) {
+		super(x, y, m, d);
 		const alpha = theta * Math.PI / 180;
 		const a = L / 2;
 		const b = 3 * L * Math.tan(alpha) / 2;
