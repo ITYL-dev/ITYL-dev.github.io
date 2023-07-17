@@ -81,12 +81,12 @@ if (astCtx) {
 		const dT = (time[2] - time[1])/1000;
 		switch (movement) {
 		case "rotateLeft": {
-			rocket.rotate(rotationSpeed);
+			rocket.rotate(-rotationSpeed);
 			rocket.move(dT);
 			break;
 		}
 		case "rotateRight": {
-			rocket.rotate(-rotationSpeed);
+			rocket.rotate(rotationSpeed);
 			rocket.move(dT);
 			break;
 		}
