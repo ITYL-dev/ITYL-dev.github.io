@@ -78,7 +78,6 @@ if (astCtx) {
 	});
 	const animate = () => {
 		time[2] = new Date().getTime();
-		myAnim = requestAnimationFrame(animate);
 		const dT = (time[2] - time[1])/1000;
 		switch (movement) {
 		case "rotateLeft": {
@@ -106,6 +105,7 @@ if (astCtx) {
 		}
 		astCtx.fillRect(0, 0, astCnv.width, astCnv.height);
 		rocket.drawSolid(astCtx);
+		myAnim = requestAnimationFrame(animate);
 		time[1] = time[2];
 	};
 	animate();	
