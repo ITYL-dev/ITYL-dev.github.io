@@ -47,17 +47,27 @@ class RotationMatrix2D {
 }
 
 class Solid2D {
-	constructor(x ,y, m, d) {
+	constructor(x, y, m, d) {
 		this.origin = new Vector2D(x, y);
 		this.vectors = [];
 		this.speedVector = new Vector2D(0,0);
 		this.mass = m;
 		this.drag = d;
 		this.totalRotation = 0;
+		this.radius = 0;
 	}
 
 	addPoint(x,y,toDraw=true) {
 		this.vectors.push([new Vector2D(x,y), toDraw]);
+		let max = this.radius;
+		let value = 0;
+		this.vectors.forEach((el, ind) => {
+			value = el[0].norm();
+			if (value > max) {
+				max = value;
+			}
+		});
+		this.radius = max;
 	}
 
 	rotate(theta) {
@@ -81,7 +91,19 @@ class Solid2D {
 		}
 	}
 
-	drawSolid(ctx) {
+	isOutOfBounds(cnv) {
+		return (this.origin.x - this.radius > cnv.width) || (this.origin.x + this.radius < 0) || (this.origin.y - this.radius > cnv.height) || (this.origin.y + this.radius < 0);
+	}
+
+	replaceOnOtherSide(cnv) {
+		if (this.isOutOfBounds(cnv)) {
+			this.origin.x = cnv.width - this.origin.x;
+			this.origin.y = cnv.height - this.origin.y;
+		}
+	}
+
+	drawSolid(ctx, cnv) {
+		this.replaceOnOtherSide(cnv);
 		ctx.beginPath();
 		this.vectors.map(([vector, toDraw], i) => {
 			if (i !== 0 && toDraw) {
@@ -91,7 +113,7 @@ class Solid2D {
 			}
 		});
 		ctx.stroke();
-	}
+	}	
 }
 
 class Rocket extends Solid2D {

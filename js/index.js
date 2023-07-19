@@ -5,7 +5,7 @@ const rotationSpeed = 2;
 const thrust = 7;
 
 const setUpAnim = () => {
-	astCtx.fillStyle = "rgba(0, 0, 0, 0.25)";
+	astCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
 	astCtx.strokeStyle = "white";
 	astCtx.lineWidth = 1.5;
 };
@@ -64,7 +64,7 @@ if (astCtx) {
 	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
 	let time = [new Date().getTime(), new Date().getTime(), new Date().getTime()];
 	setInterval(() => {
-		const elapsedTime =(time[2] - time[0]) / 1000;
+		const elapsedTime = (time[2] - time[0]) / 1000;
 		const secondes = Math.round(elapsedTime % 60);
 		const minutes = Math.round((elapsedTime - secondes) / 60);
 		document.getElementById("timer").innerHTML = `Time: ${minutes > 0 ? `${minutes}:` : ""}${secondes}`;
@@ -104,7 +104,7 @@ if (astCtx) {
 		}
 		}
 		astCtx.fillRect(0, 0, astCnv.width, astCnv.height);
-		rocket.drawSolid(astCtx);
+		rocket.drawSolid(astCtx, astCnv);
 		myAnim = requestAnimationFrame(animate);
 		time[1] = time[2];
 	};
