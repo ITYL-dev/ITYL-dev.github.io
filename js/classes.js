@@ -1,35 +1,37 @@
 /* eslint-disable no-unused-vars */
 class Vector2D {
 	constructor(x,y) {
-		this.#x = x;
-		this.#y = y;
+		this.x = x;
+		this.y = y;
 	}
 
 	add(vector2D) {
 		const newV = new Vector2D(0,0);
-		newV.#x = this.#x + vector2D.#x;
-		newV.#y = this.#y + vector2D.#y;
+		newV.x = this.x + vector2D.x;
+		newV.y = this.y + vector2D.y;
 		return newV;
 	}
 
 	multiply(n) {
 		const newV = new Vector2D(0,0);
-		newV.#x = this.#x * n;
-		newV.#y = this.#y * n;
+		newV.x = this.x * n;
+		newV.y = this.y * n;
 		return newV;
 	}
 
 	norm() {
-		return Math.sqrt(this.#x * this.#x + this.#y * this.#y);
+		return Math.sqrt(this.x * this.x + this.y * this.y);
 	}
 
 	unit() {
-		const copyV = new Vector2D(this.#x,this.#y);
+		const copyV = new Vector2D(this.x,this.y);
 		return copyV.multiply(1/this.norm());
 	}
 }
 
 class RotationMatrix2D {
+	#matrix;
+
 	constructor(theta) {
 		this.#matrix = [[null, null], [null, null]];
 		this.#matrix[0][0] = Math.cos(theta);
@@ -40,13 +42,21 @@ class RotationMatrix2D {
 
 	dot(vector2D) {
 		const newV = new Vector2D();
-		newV.#x = vector2D.#x * this.#matrix[0][0] + vector2D.#y * this.#matrix[0][1];
-		newV.#y = vector2D.#x * this.#matrix[1][0] + vector2D.#y * this.#matrix[1][1];
+		newV.x = vector2D.x * this.#matrix[0][0] + vector2D.y * this.#matrix[0][1];
+		newV.y = vector2D.x * this.#matrix[1][0] + vector2D.y * this.#matrix[1][1];
 		return newV;
 	}
 }
 
 class Solid2D {
+	#origin;
+	#vectors;
+	#speedVector;
+	#mass;
+	#drag;
+	#totalRotation;
+	#radius;
+
 	constructor(x, y, m, d) {
 		this.#origin = new Vector2D(x, y);
 		this.#vectors = [];
@@ -90,13 +100,13 @@ class Solid2D {
 	}
 
 	#isOutOfBounds(cnv) {
-		return (this.#origin.#x - this.#radius > cnv.width) || (this.#origin.#x + this.#radius < 0) || (this.#origin.#y - this.#radius > cnv.height) || (this.#origin.#y + this.#radius < 0);
+		return (this.#origin.x - this.#radius > cnv.width) || (this.#origin.x + this.#radius < 0) || (this.#origin.y - this.#radius > cnv.height) || (this.#origin.y + this.#radius < 0);
 	}
 
 	#replaceOnOtherSide(cnv) {
 		if (this.#isOutOfBounds(cnv)) {
-			this.#origin.#x = cnv.width - this.#origin.#x;
-			this.#origin.#y = cnv.height - this.#origin.#y;
+			this.#origin.x = cnv.width - this.#origin.x;
+			this.#origin.y = cnv.height - this.#origin.y;
 		}
 	}
 
@@ -105,9 +115,9 @@ class Solid2D {
 		ctx.beginPath();
 		this.#vectors.map(([vector, toDraw], i) => {
 			if (i !== 0 && toDraw) {
-				ctx.lineTo(this.#origin.#x + vector.#x, this.#origin.#y + vector.#y);
+				ctx.lineTo(this.#origin.x + vector.x, this.#origin.y + vector.y);
 			} else {
-				ctx.moveTo(this.#origin.#x + vector.#x, this.#origin.#y + vector.#y);
+				ctx.moveTo(this.#origin.x + vector.x, this.#origin.y + vector.y);
 			}
 		});
 		ctx.stroke();
