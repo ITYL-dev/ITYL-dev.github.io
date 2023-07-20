@@ -92,7 +92,7 @@ class Solid2D {
 
 	move(dT, F=0) {
 		if (this.vectors.length > 0) {
-			this.#speedVector = this.#speedVector.add(this.vectors[0][0].unit().multiply(F).add(this.#speedVector.multiply(-this.#drag)).multiply(dT / this.#mass))
+			this.#speedVector = this.#speedVector.add(this.vectors[0][0].unit().multiply(F).add(this.#speedVector.multiply(-this.#drag)).multiply(dT / this.#mass));
 			this.#origin = this.#origin.add(this.#speedVector);
 		} else {
 			throw new Error("No first vector to indicate the way forward");
@@ -142,17 +142,17 @@ class Rocket extends Solid2D {
 		this.addPoint(-c, 0);
 		this.addPoint(c * -flameRatio, 0, false);
 		this.addPoint(0, L);
-		this.addPoint(c * flameRatio, 0)
+		this.addPoint(c * flameRatio, 0);
 	}
 
 	estinguishFlame() {
 		this.vectors[this.vectors.length-1][1] = false;
-		this.vectors[this.vectors.length-2][1] = false
+		this.vectors[this.vectors.length-2][1] = false;
 	}
 
 	lightUpFlame() {
 		this.vectors[this.vectors.length-1][1] = true;
-		this.vectors[this.vectors.length-2][1] = true
+		this.vectors[this.vectors.length-2][1] = true;
 	}
 
 	variateFlame() {

@@ -39,13 +39,13 @@ if (astCtx) {
 		time[2] = new Date().getTime();
 		const dT = (time[2] - time[1]) / 1000;
 		if (forward) {
-			rocket.lightUpFlame()
+			rocket.lightUpFlame();
 			rocket.move(dT,thrust);
 			if (frameCount % 10 === 0) {
-				rocket.variateFlame()
+				rocket.variateFlame();
 			}
 		} else {
-			rocket.estinguishFlame()
+			rocket.estinguishFlame();
 		}
 		switch (rotation) {
 		case 0: {
