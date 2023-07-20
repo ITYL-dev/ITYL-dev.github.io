@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 const astCnv = document.getElementById("asteroids");
 const astCtx = astCnv.getContext("2d");
-const rotationSpeed = 2;
-const thrust = 7;
+const rotationSpeed = 3;
+const thrust = 10;
 
 const setUpAnim = () => {
 	astCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -19,42 +19,44 @@ window.onresize = () => {
 	setUpAnim();
 };
 
-let movement = "none";
+let rotation = 0;
+let forward = false;
 
 addEventListener("keydown", event => {
 	switch (event.code) {
 	case "KeyA": {
-		movement = "rotateLeft";
+		rotation = 1;
 		break;
 	}
 	case "KeyD": {
-		movement = "rotateRight";
+		rotation = 2;
 		break;
 	}
 	case "ArrowLeft": {
-		movement = "rotateLeft";
+		rotation = 1;
 		break;
 	}
 	case "ArrowRight": {
-		movement = "rotateRight";
+		rotation = 2;
 		break;
 	}
 	case "ArrowUp": {
-		movement = "applyForce";
+		forward = true;
 		break;
 	}
 	case "KeyW": {
-		movement = "applyForce";
+		forward = true;
 		break;
-	}
-	default: {
-		console.log("unbound key: ", event.key);
 	}	
 	}
 });
 
-addEventListener("keyup", () => {
-	movement = "none";
+addEventListener("keyup", event => {
+	if (event.code === "KeyA" || event.code === "KeyD" || event.code === "ArrowLeft" || event.code === "ArrowRight") {
+		rotation = 0;
+	} else if (event.code === "ArrowUp" || event.code === "KeyW") {
+		forward = false;
+	}
 });
 
 let isFirstTimer = true;
@@ -79,28 +81,23 @@ if (astCtx) {
 	const animate = () => {
 		time[2] = new Date().getTime();
 		const dT = (time[2] - time[1])/1000;
-		switch (movement) {
-		case "rotateLeft": {
+		if (forward) {
+			rocket.move(dT,thrust);
+		}
+		switch (rotation) {
+		case 0: {
+			rocket.move(dT);
+			break;
+		}
+		case 1: {
 			rocket.rotate(-rotationSpeed);
 			rocket.move(dT);
 			break;
 		}
-		case "rotateRight": {
+		case 2: {
 			rocket.rotate(rotationSpeed);
 			rocket.move(dT);
 			break;
-		}
-		case "applyForce": {
-			rocket.move(dT,thrust);
-			break;
-		}
-		case "none": {
-			rocket.move(dT);
-			break;
-		}
-		default: {
-			rocket.move(dT);
-			throw new Error("unvalid movement id");
 		}
 		}
 		astCtx.fillRect(0, 0, astCnv.width, astCnv.height);

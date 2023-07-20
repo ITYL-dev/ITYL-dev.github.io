@@ -82,9 +82,7 @@ class Solid2D {
 
 	move(dT, F=0) {
 		if (this.vectors.length > 0) {
-			const thrustVector = this.vectors[0][0].unit().multiply(F);
-			this.speedVector.x = this.speedVector.x + dT * (thrustVector.x - this.drag * this.speedVector.x);
-			this.speedVector.y = this.speedVector.y + dT * (thrustVector.y - this.drag * this.speedVector.y);
+			this.speedVector = this.speedVector.add(this.vectors[0][0].unit().multiply(F).add(this.speedVector.multiply(-this.drag)).multiply(dT / this.mass))
 			this.origin = this.origin.add(this.speedVector);
 		} else {
 			throw new Error("No first vector to indicate the way forward");
@@ -117,7 +115,7 @@ class Solid2D {
 }
 
 class Rocket extends Solid2D {
-	constructor(x, y, m=1000, d=1, L=30, theta=15) {
+	constructor(x, y, m=1.5, d=1, L=30, theta=15) {
 		super(x, y, m, d);
 		const alpha = theta * Math.PI / 180;
 		const a = L / 2;
