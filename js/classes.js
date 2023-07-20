@@ -50,28 +50,28 @@ class RotationMatrix2D {
 
 class Solid2D {
 	#origin;
-	#vectors;
+	vectors;
 	#speedVector;
 	#mass;
 	#drag;
-	#totalRotation;
+	totalRotation;
 	#radius;
 
 	constructor(x, y, m, d) {
 		this.#origin = new Vector2D(x, y);
-		this.#vectors = [];
+		this.vectors = [];
 		this.#speedVector = new Vector2D(0,0);
 		this.#mass = m;
 		this.#drag = d;
-		this.#totalRotation = 0;
+		this.totalRotation = 0;
 		this.#radius = 0;
 	}
 
 	addPoint(x, y, toDraw=true) {
-		this.#vectors.push([new Vector2D(x,y), toDraw]);
+		this.vectors.push([new Vector2D(x,y), toDraw]);
 		let max = this.#radius;
 		let value = 0;
-		this.#vectors.forEach(el => {
+		this.vectors.forEach(el => {
 			value = el[0].norm();
 			if (value > max) {
 				max = value;
@@ -82,8 +82,8 @@ class Solid2D {
 
 	rotate(theta) {
 		const alpha = theta * Math.PI / 180;
-		this.#totalRotation = this.#totalRotation + alpha;
-		this.#vectors = this.#vectors.map(([vector, toDraw]) => {
+		this.totalRotation = this.totalRotation + alpha;
+		this.vectors = this.vectors.map(([vector, toDraw]) => {
 			const matrix = new RotationMatrix2D(alpha);
 			const newV = matrix.dot(vector);
 			return [newV, toDraw];
@@ -91,8 +91,8 @@ class Solid2D {
 	}
 
 	move(dT, F=0) {
-		if (this.#vectors.length > 0) {
-			this.#speedVector = this.#speedVector.add(this.#vectors[0][0].unit().multiply(F).add(this.#speedVector.multiply(-this.#drag)).multiply(dT / this.#mass))
+		if (this.vectors.length > 0) {
+			this.#speedVector = this.#speedVector.add(this.vectors[0][0].unit().multiply(F).add(this.#speedVector.multiply(-this.#drag)).multiply(dT / this.#mass))
 			this.#origin = this.#origin.add(this.#speedVector);
 		} else {
 			throw new Error("No first vector to indicate the way forward");
@@ -113,7 +113,7 @@ class Solid2D {
 	drawSolid(ctx, cnv) {
 		this.#replaceOnOtherSide(cnv);
 		ctx.beginPath();
-		this.#vectors.map(([vector, toDraw], i) => {
+		this.vectors.map(([vector, toDraw], i) => {
 			if (i !== 0 && toDraw) {
 				ctx.lineTo(this.#origin.x + vector.x, this.#origin.y + vector.y);
 			} else {
@@ -125,8 +125,11 @@ class Solid2D {
 }
 
 class Rocket extends Solid2D {
-	constructor(x, y, L=30, theta=15) {
-		super(x, y, 1.5, 1);
+	#L;
+
+	constructor(x, y, L=40, theta=15, flameRatio = 0.6) {
+		super(x, y, 2, 1);
+		this.#L = L;
 		const alpha = theta * Math.PI / 180;
 		const a = L / 2;
 		const b = 3 * L * Math.tan(alpha) / 2;
@@ -137,5 +140,23 @@ class Rocket extends Solid2D {
 		this.addPoint(0, -L);
 		this.addPoint(c, 0, false);
 		this.addPoint(-c, 0);
+		this.addPoint(c * -flameRatio, 0, false);
+		this.addPoint(0, L);
+		this.addPoint(c * flameRatio, 0)
+	}
+
+	estinguishFlame() {
+		this.vectors[this.vectors.length-1][1] = false;
+		this.vectors[this.vectors.length-2][1] = false
+	}
+
+	lightUpFlame() {
+		this.vectors[this.vectors.length-1][1] = true;
+		this.vectors[this.vectors.length-2][1] = true
+	}
+
+	variateFlame() {
+		const matrix =  new RotationMatrix2D(this.totalRotation);
+		this.vectors[this.vectors.length-2][0] = matrix.dot(new Vector2D(0, 0.75 * this.#L * (1 - Math.random() / 3)));
 	}
 }

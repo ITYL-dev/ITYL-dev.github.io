@@ -1,70 +1,17 @@
 /* eslint-disable no-undef */
 const astCnv = document.getElementById("asteroids");
-const astCtx = astCnv.getContext("2d");
-const rotationSpeed = 3;
-const thrust = 10;
-
-const setUpAnim = () => {
-	astCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
-	astCtx.strokeStyle = "white";
-	astCtx.lineWidth = 1.5;
-};
-
 astCnv.height = innerHeight * 0.8;
 astCnv.width = innerWidth * 0.96;
-
-window.onresize = () => {
-	astCnv.height = innerHeight * 0.8;
-	astCnv.width = innerWidth * 0.96;
-	setUpAnim();
-};
-
-let rotation = 0;
-let forward = false;
-
-addEventListener("keydown", event => {
-	switch (event.code) {
-	case "KeyA": {
-		rotation = 1;
-		break;
-	}
-	case "KeyD": {
-		rotation = 2;
-		break;
-	}
-	case "ArrowLeft": {
-		rotation = 1;
-		break;
-	}
-	case "ArrowRight": {
-		rotation = 2;
-		break;
-	}
-	case "ArrowUp": {
-		forward = true;
-		break;
-	}
-	case "KeyW": {
-		forward = true;
-		break;
-	}	
-	}
-});
-
-addEventListener("keyup", event => {
-	if (event.code === "KeyA" || event.code === "KeyD" || event.code === "ArrowLeft" || event.code === "ArrowRight") {
-		rotation = 0;
-	} else if (event.code === "ArrowUp" || event.code === "KeyW") {
-		forward = false;
-	}
-});
-
-let isFirstTimer = true;
+const astCtx = astCnv.getContext("2d");
 
 if (astCtx) {
-	setUpAnim();
-	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
-	let time = [new Date().getTime(), new Date().getTime(), new Date().getTime()];
+
+	let rotation = 0;
+	let forward = false;
+	let frameCount = 0;
+	let isFirstTimer = true;
+	let time = [new Date().getTime(), new Date().getTime(), new Date().getTime()]; // initial time, last time, current time
+
 	setInterval(() => {
 		const elapsedTime = (time[2] - time[0]) / 1000;
 		const secondes = Math.round(elapsedTime % 60);
@@ -78,11 +25,27 @@ if (astCtx) {
 			return 1000;
 		}
 	});
+
+	const rotationSpeed = 3;
+	const thrust = 10;
+	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
+	const setUpAnim = () => {
+		astCtx.fillStyle = "black";
+		astCtx.strokeStyle = "white";
+		astCtx.lineWidth = 1.5;
+	};
 	const animate = () => {
+		frameCount = frameCount + 1;
 		time[2] = new Date().getTime();
-		const dT = (time[2] - time[1])/1000;
+		const dT = (time[2] - time[1]) / 1000;
 		if (forward) {
+			rocket.lightUpFlame()
 			rocket.move(dT,thrust);
+			if (frameCount % 10 === 0) {
+				rocket.variateFlame()
+			}
+		} else {
+			rocket.estinguishFlame()
 		}
 		switch (rotation) {
 		case 0: {
@@ -105,6 +68,51 @@ if (astCtx) {
 		myAnim = requestAnimationFrame(animate);
 		time[1] = time[2];
 	};
+	
+	window.onresize = () => {
+		astCnv.height = innerHeight * 0.8;
+		astCnv.width = innerWidth * 0.96;
+		setUpAnim();
+	};
+	
+	addEventListener("keydown", event => {
+		switch (event.code) {
+		case "KeyA": {
+			rotation = 1;
+			break;
+		}
+		case "KeyD": {
+			rotation = 2;
+			break;
+		}
+		case "ArrowLeft": {
+			rotation = 1;
+			break;
+		}
+		case "ArrowRight": {
+			rotation = 2;
+			break;
+		}
+		case "ArrowUp": {
+			forward = true;
+			break;
+		}
+		case "KeyW": {
+			forward = true;
+			break;
+		}	
+		}
+	});
+	
+	addEventListener("keyup", event => {
+		if (event.code === "KeyA" || event.code === "KeyD" || event.code === "ArrowLeft" || event.code === "ArrowRight") {
+			rotation = 0;
+		} else if (event.code === "ArrowUp" || event.code === "KeyW") {
+			forward = false;
+		}
+	});
+	
+	setUpAnim();
 	animate();	
 } else {
 	throw new Error("canvas unsupported by the browser");
