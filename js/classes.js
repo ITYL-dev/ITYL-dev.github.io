@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 class Vector2D {
 	constructor(x,y) {
 		this.x = x;
@@ -124,6 +123,7 @@ class Solid2D {
 	}	
 }
 
+// eslint-disable-next-line no-unused-vars
 class Rocket extends Solid2D {
 	#L;
 
