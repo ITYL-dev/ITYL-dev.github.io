@@ -160,3 +160,21 @@ class Rocket extends Solid2D {
 		this.vectors[this.vectors.length-2][0] = matrix.dot(new Vector2D(0, 0.75 * this.#L * (1 - Math.random() / 3)));
 	}
 }
+
+// eslint-disable-next-line no-unused-vars
+class Asteroid extends Solid2D {
+	constructor(x, y, meanSize=70) {
+		super(x, y, 1, 0);
+		const n = this.#randint(5,12);
+		console.log(n);
+		for (let i = 0; i < n; i++) {
+			const vec = new RotationMatrix2D(i * 2 * Math.PI / n).dot(new Vector2D(0, this.#randint(0.5 * meanSize, 1.5 * meanSize)));
+			this.addPoint(vec.x, vec.y);
+		}
+		this.addPoint(this.vectors[0][0].x, this.vectors[0][0].y);
+	}
+
+	#randint(min, max) {
+		return min + Math.floor(Math.random() * (max - min + 1));
+	}
+}

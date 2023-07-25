@@ -12,11 +12,18 @@ if (astCtx) {
 	const rocketSound = new Audio("sounds/rocket.mp3");
 	rocketSound.loop = true;
 	rocketSound.volume = 0.1;
+
+	// eslint-disable-next-line no-undef
+	const asteroids = [new Asteroid(150,150)];
+	const astAccTime = 1;
+	const astInitialThrust = 1;
+
 	const setUpAnim = () => {
 		astCtx.fillStyle = "black";
 		astCtx.strokeStyle = "white";
 		astCtx.lineWidth = 1.5;
 	};
+
 	const minTwoDigits = (n) => {
 		const nStr = n.toString();
 		if (nStr.length === 1) {
@@ -28,6 +35,7 @@ if (astCtx) {
 
 	let rotation = 0;
 	let forward = false;
+
 	let frameCount = 0;
 	let time = [new Date().getTime(), new Date().getTime(), new Date().getTime()]; // initial time, last time, current time
 
@@ -92,33 +100,38 @@ if (astCtx) {
 		frameCount = frameCount + 1;
 		time[2] = new Date().getTime();
 		const dT = (time[2] - time[1]) / 1000;
+
 		if (forward) {
 			rocket.lightUpFlame();
-			rocket.move(dT,thrust);
 			if (frameCount % 10 === 0) {
 				rocket.variateFlame();
 			}
+			rocket.move(dT,thrust);
 		} else {
+			rocket.move(dT);
 			rocket.estinguishFlame();
 		}
+
 		switch (rotation) {
-		case 0: {
-			rocket.move(dT);
-			break;
-		}
 		case 1: {
 			rocket.rotate(-rotationSpeed);
-			rocket.move(dT);
 			break;
 		}
 		case 2: {
 			rocket.rotate(rotationSpeed);
-			rocket.move(dT);
 			break;
 		}
 		}
+
 		astCtx.fillRect(0, 0, astCnv.width, astCnv.height);
+
+		asteroids.forEach(ast => {
+			ast.move(dT,  time[2] - time[0] < astAccTime * 1000 ? astInitialThrust : 0);
+			ast.drawSolid(astCtx, astCnv);
+		});
+
 		rocket.drawSolid(astCtx, astCnv);
+
 		requestAnimationFrame(animate);
 		time[1] = time[2];
 	};
