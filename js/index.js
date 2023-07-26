@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const astCnv = document.getElementById("asteroids");
 astCnv.height = innerHeight * 0.8;
 astCnv.width = innerWidth * 0.96;
@@ -15,7 +16,7 @@ if (astCtx) {
 	const spawnAsts = (meanSize) => {
 		const a = 3 * meanSize; // max diameter of asteroid
 		const b = a * (1 / Math.SQRT2 - 1 / 6); // corner margin
-		const asteroids = []
+		const asteroids = [];
 		if (astCnv.height - (2 * b + a /*margin between the spawn areas*/) > 2 * a && astCnv.width - (2 * b + 2 * a /*same*/) > 3 * a) {
 			asteroids.push(new Asteroid(-0.5 * meanSize, randint(b, (astCnv.height - a) / 2), meanSize));
 			asteroids.push(new Asteroid(-0.5 * meanSize, randint((astCnv.height + a) / 2, astCnv.height - b), meanSize));
@@ -29,12 +30,12 @@ if (astCtx) {
 			asteroids.push(new Asteroid(randint(2 * astCnv.width / 3 + a / 2, astCnv.width - b), 0.5 * meanSize + astCnv.height, meanSize));
 			asteroids.forEach(ast => {
 				ast.rotate(randint(0, 360));
-			})
+			});
 		} else {
 			throw new Error("Canva too small to spawn asteroids");
 		}
 		return asteroids;
-	}
+	};
 	const asteroids = spawnAsts(60);
 	const astAccTime = 0.1;
 	const astInitialThrust = 10;
