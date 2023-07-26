@@ -1,3 +1,5 @@
+const randint = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+
 class Vector2D {
 	constructor(x,y) {
 		this.x = x;
@@ -120,6 +122,9 @@ class Solid2D {
 			}
 		});
 		ctx.stroke();
+		ctx.beginPath();
+		ctx.arc(this.#origin.x, this.#origin.y,this. #radius, 0, 2 * Math.PI);
+		ctx.stroke();
 	}	
 }
 
@@ -163,18 +168,13 @@ class Rocket extends Solid2D {
 
 // eslint-disable-next-line no-unused-vars
 class Asteroid extends Solid2D {
-	constructor(x, y, meanSize=70) {
+	constructor(x, y, meanSize) {
 		super(x, y, 1, 0);
-		const n = this.#randint(5,12);
-		console.log(n);
+		const n = randint(7,14);
 		for (let i = 0; i < n; i++) {
-			const vec = new RotationMatrix2D(i * 2 * Math.PI / n).dot(new Vector2D(0, this.#randint(0.5 * meanSize, 1.5 * meanSize)));
+			const vec = new RotationMatrix2D(i * 2 * Math.PI / n).dot(new Vector2D(0, -randint(0.5 * meanSize, 1.5 * meanSize)));
 			this.addPoint(vec.x, vec.y);
 		}
 		this.addPoint(this.vectors[0][0].x, this.vectors[0][0].y);
-	}
-
-	#randint(min, max) {
-		return min + Math.floor(Math.random() * (max - min + 1));
 	}
 }
