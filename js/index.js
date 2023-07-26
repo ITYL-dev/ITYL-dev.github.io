@@ -17,11 +17,9 @@ if (astCtx) {
 		const a = 3 * meanSize; // max diameter of asteroid
 		const b = a * (1 / Math.SQRT2 - 1 / 6); // corner margin
 		const asteroids = [];
-		if (astCnv.height - (2 * b + a /*margin between the spawn areas*/) > 2 * a && astCnv.width - (2 * b + 2 * a /*same*/) > 3 * a) {
-			asteroids.push(new Asteroid(-0.5 * meanSize, randint(b, (astCnv.height - a) / 2), meanSize));
-			asteroids.push(new Asteroid(-0.5 * meanSize, randint((astCnv.height + a) / 2, astCnv.height - b), meanSize));
-			asteroids.push(new Asteroid(0.5 * meanSize + astCnv.width, randint(b, (astCnv.height - a) / 2), meanSize));
-			asteroids.push(new Asteroid(0.5 * meanSize + astCnv.width, randint((astCnv.height + a) / 2, astCnv.height - b), meanSize));
+		if (astCnv.height - (2 * b /*margin between the spawn areas*/) > a && astCnv.width - (2 * b + 2 * a /*same*/) > 3 * a) {
+			asteroids.push(new Asteroid(-0.5 * meanSize, randint(b, astCnv.height - b), meanSize));
+			asteroids.push(new Asteroid(0.5 * meanSize + astCnv.width, randint(b, astCnv.height - b), meanSize));
 			asteroids.push(new Asteroid(randint(b, astCnv.width / 3 - a / 2), -0.5 * meanSize, meanSize));
 			asteroids.push(new Asteroid(randint(astCnv.width / 3 + a / 2, 2 * astCnv.width / 3 - a / 2), -0.5 * meanSize, meanSize));
 			asteroids.push(new Asteroid(randint(2 * astCnv.width / 3 + a / 2, astCnv.width - b), -0.5 * meanSize, meanSize));
@@ -38,7 +36,7 @@ if (astCtx) {
 	};
 	const asteroids = spawnAsts(60);
 	const astAccTime = 0.1;
-	const astInitialThrust = 10;
+	const astInitialThrust = 5;
 
 	const setUpAnim = () => {
 		astCtx.fillStyle = "black";
