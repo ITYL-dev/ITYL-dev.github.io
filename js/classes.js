@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const randint = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 
 class Vector2D {
@@ -128,7 +129,6 @@ class Solid2D {
 	}	
 }
 
-// eslint-disable-next-line no-unused-vars
 class Rocket extends Solid2D {
 	#L;
 
@@ -166,7 +166,6 @@ class Rocket extends Solid2D {
 	}
 }
 
-// eslint-disable-next-line no-unused-vars
 class Asteroid extends Solid2D {
 	constructor(x, y, meanSize) {
 		super(x, y, 1, 0);
@@ -176,5 +175,19 @@ class Asteroid extends Solid2D {
 			this.addPoint(vec.x, vec.y);
 		}
 		this.addPoint(this.vectors[0][0].x, this.vectors[0][0].y);
+	}
+}
+
+class collisionHandler {
+	#solids;
+	#n;
+
+	constructor(solids) {
+		this.#solids = solids;
+		this.#n = solids.length; 
+	}
+
+	checkCollision() {
+
 	}
 }

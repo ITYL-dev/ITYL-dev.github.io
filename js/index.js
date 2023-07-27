@@ -34,6 +34,7 @@ if (astCtx) {
 		}
 		return asteroids;
 	};
+	
 	const asteroids = spawnAsts(60);
 	const astAccTime = 0.1;
 	const astInitialThrust = 5;
