@@ -29,6 +29,18 @@ class Vector2D {
 		const copyV = new Vector2D(this.x,this.y);
 		return copyV.multiply(1/this.norm());
 	}
+
+	sub(vector2D) {
+		return this.add(vector2D.multiply(-1));
+	}
+
+	distance(vector2D) {
+		return this.sub(vector2D).norm();
+	}
+
+	scal(vecteur2D) {
+		return (this.x * vecteur2D.x) + (this.y * vecteur2D.y);
+	}
 }
 
 class RotationMatrix2D {
@@ -51,27 +63,27 @@ class RotationMatrix2D {
 }
 
 class Solid2D {
-	#origin;
+	origin;
 	vectors;
 	#speedVector;
 	#mass;
 	#drag;
 	totalRotation;
-	#radius;
+	radius;
 
 	constructor(x, y, m, d) {
-		this.#origin = new Vector2D(x, y);
+		this.origin = new Vector2D(x, y);
 		this.vectors = [];
 		this.#speedVector = new Vector2D(0,0);
 		this.#mass = m;
 		this.#drag = d;
 		this.totalRotation = 0;
-		this.#radius = 0;
+		this.radius = 0;
 	}
 
 	addPoint(x, y, toDraw=true) {
 		this.vectors.push([new Vector2D(x,y), toDraw]);
-		let max = this.#radius;
+		let max = this.radius;
 		let value = 0;
 		this.vectors.forEach(el => {
 			value = el[0].norm();
@@ -79,7 +91,7 @@ class Solid2D {
 				max = value;
 			}
 		});
-		this.#radius = max;
+		this.radius = max;
 	}
 
 	rotate(theta) {
@@ -95,20 +107,20 @@ class Solid2D {
 	move(dT, F=0) {
 		if (this.vectors.length > 0) {
 			this.#speedVector = this.#speedVector.add(this.vectors[0][0].unit().multiply(F).add(this.#speedVector.multiply(-this.#drag)).multiply(dT / this.#mass));
-			this.#origin = this.#origin.add(this.#speedVector);
+			this.origin = this.origin.add(this.#speedVector);
 		} else {
 			throw new Error("No first vector to indicate the way forward");
 		}
 	}
 
 	#isOutOfBounds(cnv) {
-		return (this.#origin.x - this.#radius > cnv.width) || (this.#origin.x + this.#radius < 0) || (this.#origin.y - this.#radius > cnv.height) || (this.#origin.y + this.#radius < 0);
+		return (this.origin.x - this.radius > cnv.width) || (this.origin.x + this.radius < 0) || (this.origin.y - this.radius > cnv.height) || (this.origin.y + this.radius < 0);
 	}
 
 	#replaceOnOtherSide(cnv) {
 		if (this.#isOutOfBounds(cnv)) {
-			this.#origin.x = cnv.width - this.#origin.x;
-			this.#origin.y = cnv.height - this.#origin.y;
+			this.origin.x = cnv.width - this.origin.x;
+			this.origin.y = cnv.height - this.origin.y;
 		}
 	}
 
@@ -117,14 +129,11 @@ class Solid2D {
 		ctx.beginPath();
 		this.vectors.map(([vector, toDraw], i) => {
 			if (i !== 0 && toDraw) {
-				ctx.lineTo(this.#origin.x + vector.x, this.#origin.y + vector.y);
+				ctx.lineTo(this.origin.x + vector.x, this.origin.y + vector.y);
 			} else {
-				ctx.moveTo(this.#origin.x + vector.x, this.#origin.y + vector.y);
+				ctx.moveTo(this.origin.x + vector.x, this.origin.y + vector.y);
 			}
 		});
-		ctx.stroke();
-		ctx.beginPath();
-		ctx.arc(this.#origin.x, this.#origin.y,this. #radius, 0, 2 * Math.PI);
 		ctx.stroke();
 	}	
 }
@@ -182,12 +191,60 @@ class collisionHandler {
 	#solids;
 	#n;
 
-	constructor(solids) {
-		this.#solids = solids;
-		this.#n = solids.length; 
+	constructor(rocket, asteroids) {
+		this.#solids = [rocket].concat(asteroids);
+		this.#n = this.#solids.length; 
 	}
 
-	checkCollision() {
-
+	#checkCollision(solid1, solid2) {
+		if (solid1.origin.distance(solid2.origin) > solid1.radius + solid2.radius) {
+			return false;
+		} else {
+			let i_min = 0;
+			let j_min = 0;
+			let d_min = solid1.origin.add(solid1.vectors[i_min][0]).distance(solid2.origin.add(solid2.vectors[j_min][0]));
+			let d;
+			for (let i = 0; i < solid1.vectors.length; i++) {
+				for (let j = 0; j < solid2.vectors.length; j++) {
+					d = solid1.origin.add(solid1.vectors[i][0]).distance(solid2.origin.add(solid2.vectors[j][0]));
+					if (d < d_min) {
+						d_min = d;
+						i_min = i;
+						j_min = j;
+					}
+				}
+			}
+			let j_sec_min = (j_min + 1) % solid2.vectors.length;
+			d_min = solid1.origin.add(solid1.vectors[i_min][0]).distance(solid2.origin.add(solid2.vectors[j_sec_min][0]));
+			for (let j = 0; j < solid2.vectors.length; j++) {
+				d = solid1.origin.add(solid1.vectors[i_min][0]).distance(solid2.origin.add(solid2.vectors[j][0]));
+				if (d < d_min && j != j_min) {
+					d_min = d;
+					j_sec_min = j;
+				}
+			}
+			const u = solid1.vectors[i_min][0].add(solid1.origin.sub(solid2.origin));
+			let v = solid2.vectors[j_min][0];
+			const norm_v = v.norm();
+			v = v.multiply(1/norm_v);
+			let w = solid2.vectors[j_sec_min][0];
+			const norm_w = w.norm();
+			w = w.multiply(1/norm_w);
+			if (u.scal(v) <= norm_v && u.scal(w) <= norm_w) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
-}
+
+	checkCollisions() {
+		const collisions = [];
+		for (let i = this.#n - 1; i >= 0; i--)
+			for (let j = 0; j < i; j++) {
+				if (this.#checkCollision(this.#solids[i], this.#solids[j])) {
+					collisions.push([i,j]);
+				}
+			}
+		return collisions;
+	}}

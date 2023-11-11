@@ -7,8 +7,8 @@ const astCtx = astCnv.getContext("2d");
 if (astCtx) {
 
 	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
-	const rotationSpeed = 3;
-	const thrust = 10;
+	const rotationSpeed = 5;
+	const thrust = 25;
 	const rocketSound = new Audio("sounds/rocket.mp3");
 	rocketSound.loop = true;
 	rocketSound.volume = 0.1;
@@ -36,8 +36,10 @@ if (astCtx) {
 	};
 	
 	const asteroids = spawnAsts(60);
-	const astAccTime = 0.1;
+	const astAccTime = 0.25;
 	const astInitialThrust = 5;
+
+	const colHandler = new collisionHandler(rocket, asteroids);
 
 	const setUpAnim = () => {
 		astCtx.fillStyle = "black";
@@ -58,7 +60,7 @@ if (astCtx) {
 	let forward = false;
 
 	let frameCount = 0;
-	let time = [new Date().getTime(), new Date().getTime(), new Date().getTime()]; // initial time, last time, current time
+	const time = [new Date().getTime(), new Date().getTime(), new Date().getTime()]; // initial time, last time, current time
 
 	setInterval(() => {
 		const elapsedTime = (time[2] - time[0]) / 1000;
@@ -118,6 +120,7 @@ if (astCtx) {
 	});
 
 	const animate = () => {
+		colHandler.checkCollisions();
 		frameCount = frameCount + 1;
 		time[2] = new Date().getTime();
 		const dT = (time[2] - time[1]) / 1000;
