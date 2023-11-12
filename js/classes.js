@@ -142,7 +142,7 @@ class Rocket extends Solid2D {
 	#L;
 
 	constructor(x, y, L=40, theta=15, flameRatio = 0.6) {
-		super(x, y, 2, 1);
+		super(x, y, 1, 1);
 		this.#L = L;
 		const alpha = theta * Math.PI / 180;
 		const a = L / 2;

@@ -1,36 +1,5 @@
 body {
     font-family: "Roboto Mono", sans-serif;
-    background-color: black;
-}
-
-#asteroids {
-    border: 1px solid white;
-}
-
-main {
-    padding-left: 2vw;
-    padding-right: 2vw;
-}
-
-header {
-    height: 9vh;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding-bottom: 2vh;
-}
-
-footer {
-    height: 8vh;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.child {
-    flex: 1;
-    text-align: center;
-    color: white;
 }
 
 h1 {
@@ -47,4 +16,37 @@ h3 {
 
 h4 {
     font-size: large;
+}
+
+.container-centerer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.ast-main {
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
+
+.ast-header {
+    height: 9vh;
+    padding-bottom: 2vh;
+}
+
+.ast-footer {
+    height: 8vh;
+}
+
+#ast-game {
+    border: 1px solid white;
+}
+
+#ast-body {
+    background-color: black;
+    color: white;
 }

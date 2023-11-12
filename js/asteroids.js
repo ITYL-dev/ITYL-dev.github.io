@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const astCnv = document.getElementById("asteroids");
+const astCnv = document.getElementById("ast-game");
 astCnv.height = innerHeight * 0.8;
 astCnv.width = innerWidth * 0.96;
 const astCtx = astCnv.getContext("2d");
@@ -7,9 +7,9 @@ const astCtx = astCnv.getContext("2d");
 if (astCtx) {
 
 	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
-	const rotationSpeed = 5;
-	const thrust = 25;
-	const rocketSound = new Audio("sounds/rocket.mp3");
+	const rotationSpeed = 3;
+	const thrust = 15;
+	const rocketSound = new Audio("../sounds/rocket.mp3");
 	rocketSound.loop = true;
 	rocketSound.volume = 0.1;
 
@@ -36,8 +36,8 @@ if (astCtx) {
 	};
 	
 	const asteroids = spawnAsts(60);
-	const astAccTime = 0.25;
-	const astInitialThrust = 5;
+	const astAccTime = 0.1;
+	const astInitialThrust = 15;
 
 	const colHandler = new collisionHandler(rocket, asteroids);
 
