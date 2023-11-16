@@ -1,20 +1,24 @@
 /*
-h1 {
-    font-size: xx-large;
-}
-
-h2 {
-    font-size: x-large
-}
-
 h3 {
     font-size: larger;
+    text-align: center;
 }
 
 h4 {
     font-size: large;
+    text-align: center;
 }
 */
+
+h1 {
+    font-size: xx-large;
+    text-align: center;
+}
+
+h2 {
+    font-size: x-large;
+    text-align: center;
+}
 
 body {
     font-family: "Roboto Mono", sans-serif;
@@ -60,4 +64,12 @@ a {
     padding-right: 10px;
     padding-top: 7px;
     padding-bottom: 7px;
+}
+
+#error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 30vh;
 }

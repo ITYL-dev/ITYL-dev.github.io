@@ -36,10 +36,12 @@ div {
 
 h1 {
     font-size: xx-large;
+    text-align: center;
 }
 
 h3 {
     font-size: larger;
+    text-align: center;
 }
 
 canvas {
