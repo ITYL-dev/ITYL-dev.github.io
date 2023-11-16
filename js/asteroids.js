@@ -8,8 +8,8 @@ if (astCtx) {
 
 	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
 	const rotationSpeed = 3;
-	const thrust = 15;
-	const rocketSound = new Audio("../sounds/rocket.mp3");
+	const thrust = 30;
+	const rocketSound = new Audio("./sounds/rocket.mp3");
 	rocketSound.loop = true;
 	rocketSound.volume = 0.1;
 
@@ -43,16 +43,25 @@ if (astCtx) {
 
 	const setUpAnim = () => {
 		astCtx.fillStyle = "black";
-		astCtx.strokeStyle = "white";
+		astCtx.strokeStyle = "#f1f1f1";
 		astCtx.lineWidth = 1.5;
 	};
 
-	const minTwoDigits = (n) => {
+	const numberWithMinTwoChar = (n) => {
 		const nStr = n.toString();
 		if (nStr.length === 1) {
 			return "0" + nStr;
 		} else {
 			return nStr;
+		}
+	};
+
+	const strWithMaxSixChar = (str) => {
+		if (str.length < 7) {
+			return str;
+		}
+		else {
+			return str.slice(-6);
 		}
 	};
 
@@ -66,7 +75,7 @@ if (astCtx) {
 		const elapsedTime = (time[2] - time[0]) / 1000;
 		const secondes = Math.round(elapsedTime % 60);
 		const minutes = Math.round((elapsedTime - secondes) / 60);
-		document.getElementById("timer").innerHTML = `Time: ${minTwoDigits(minutes)}:${minTwoDigits(secondes)}`;
+		document.getElementById("timer").innerHTML = strWithMaxSixChar(numberWithMinTwoChar(minutes) + ":" + numberWithMinTwoChar(secondes));
 	}, 1000);
 	
 	window.onresize = () => {
@@ -122,6 +131,7 @@ if (astCtx) {
 	const animate = () => {
 		colHandler.checkCollisions();
 		frameCount = frameCount + 1;
+		time[1] = time[2];
 		time[2] = new Date().getTime();
 		const dT = (time[2] - time[1]) / 1000;
 
@@ -157,7 +167,6 @@ if (astCtx) {
 		rocket.drawSolid(astCtx, astCnv);
 
 		requestAnimationFrame(animate);
-		time[1] = time[2];
 	};
 	
 	setUpAnim();

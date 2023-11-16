@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITYL-dev</title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto Mono">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto Mono">
+    <link rel="stylesheet" href="./css/asteroids.css">
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
   </head>
-  <body id="ast-body">
-    <header class="ast-header container-centerer">
+  <body>
+    <header>
 		  <h1>Asteroids</h1>
     </header>
-    <main class="ast-main container-centerer">
+    <main>
 		  <canvas id="ast-game">There should be a game here...</canvas>
     </main>
-    <footer class="ast-footer container-centerer">
-      <h3>Score: </h3>
-      <h3 id="timer">Time: 00:00</h3>
+    <footer>
+      <div><h3>Score:</h3><h3 id="score">0</h3></div>
+      <div><h3>Time:&nbsp;</h3><h3 id="timer">00:00</h3></div>
     </footer>
-    <script src="../js/classes.js"></script>
-    <script src="../js/asteroids.js"></script>
   </body>
 </html>
+<script src="./js/asteroidsClasses.js"></script>
+<script src="./js/asteroids.js"></script>
