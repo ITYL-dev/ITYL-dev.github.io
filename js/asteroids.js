@@ -9,7 +9,7 @@ if (astCtx) {
 	const rocket = new Rocket(astCnv.width/2, astCnv.height/2);
 	const rotationSpeed = 3;
 	const thrust = 30;
-	const rocketSound = new Audio("./sounds/rocket.mp3");
+	const rocketSound = new Audio("./assets/rocket.mp3");
 	rocketSound.loop = true;
 	rocketSound.volume = 0.1;
 
