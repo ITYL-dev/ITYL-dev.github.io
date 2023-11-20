@@ -1,49 +1,49 @@
 body {
-    font-family: "Roboto Mono", sans-serif;
-    background-color: #343434;
-    color: #f1f1f1;
+	font-family: "Roboto Mono", sans-serif;
+	background-color: #343434;
+	color: #f1f1f1;
 }
 
 header {
-    height: 9vh;
-    padding-bottom: 2vh;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+	height: 9vh;
+	padding-bottom: 2vh;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }
 
 main {
-    padding-left: 2vw;
-    padding-right: 2vw;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+	padding-left: 2vw;
+	padding-right: 2vw;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }
 
 footer {
-    height: 8vh;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+	height: 8vh;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }
 
 div {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	flex-direction: column;
 }
 
 h1 {
-    font-size: xx-large;
-    text-align: center;
+	font-size: xx-large;
+	text-align: center;
 }
 
 h3 {
-    font-size: larger;
-    text-align: center;
+	font-size: larger;
+	text-align: center;
 }
 
 canvas {
-    border: 1px solid #f1f1f1;
+	border: 1px solid #f1f1f1;
 }
