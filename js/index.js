@@ -1,13 +1,15 @@
 const header = document.querySelector("header");
 const navbar = document.querySelector("nav");
 const main = document.querySelector("main");
+const footer = document.querySelector("footer");
 const divs = Array.prototype.slice.call(document.querySelectorAll("main > div"));
 const headerMarginTop = 15;
 const sticky = header.offsetTop - headerMarginTop;
 let divsVertical = false;
-let divsScrollWidthHorizontal = divs[0].scrollWidth;
+let maxDivsScrollWidthHorizontalSaved;
+let maxDivsScrollWidthHorizontalSavedIndex;
 let navbarVertical = false;
-let navbarScrollWidthHorizontal = navbar.scrollWidth;
+let navbarScrollWidthHorizontal;
 
 const checkNavbarWidth = () => {
 	if (!navbarVertical && navbar.scrollWidth > navbar.clientWidth) {
@@ -22,13 +24,29 @@ const checkNavbarWidth = () => {
 		navbarVertical = false;
 		navbar.style.height = "fit-content";
 	}
-	if (!divsVertical && divs[0].scrollWidth > divs[0].clientWidth) {
-		divsScrollWidthHorizontal = divs[0].scrollWidth;
+
+	if (!divsVertical) {
+		const divsScrollWidthHorizontals = divs.map(div => div.scrollWidth);
+		let maxDivsScrollWidthHorizontal = divsScrollWidthHorizontals[0];
+		let iMax = 0;
+		divsScrollWidthHorizontals.forEach((w, i) => {
+			if (w > maxDivsScrollWidthHorizontal) {
+				maxDivsScrollWidthHorizontal = w;
+				iMax = i;
+			}
+		});
+		maxDivsScrollWidthHorizontalSaved = maxDivsScrollWidthHorizontal;
+		maxDivsScrollWidthHorizontalSavedIndex = iMax;
+	}
+
+	if (!divsVertical && maxDivsScrollWidthHorizontalSaved > divs[maxDivsScrollWidthHorizontalSavedIndex].clientWidth) {
 		divs.map(div => div.classList.add("flex-column"));
+		footer.classList.add("full-width");
 		divsVertical = true;
 	}
-	if (divsVertical && divs[0].clientWidth >= divsScrollWidthHorizontal) {
+	if (divsVertical && divs[maxDivsScrollWidthHorizontalSavedIndex].clientWidth >= maxDivsScrollWidthHorizontalSaved) {
 		divs.map(div => div.classList.remove("flex-column"));
+		footer.classList.remove("full-width");
 		divsVertical = false;
 	}
 };
@@ -37,7 +55,6 @@ window.onscroll = () => {
 	if (window.scrollY >= sticky) {
 		header.classList.add("sticky");
 		main.style.paddingTop = (header.scrollHeight + 2*headerMarginTop).toString() + "px";
-		console.log(main.style.paddingTop);
 	} else {
 		header.classList.remove("sticky");
 		main.style.paddingTop = "0";
