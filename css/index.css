@@ -203,9 +203,3 @@ footer > div > p {
 	flex-direction: column;
 	padding-top: 30vh;
 }
-
-#credits {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
