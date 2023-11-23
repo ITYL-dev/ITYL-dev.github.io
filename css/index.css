@@ -27,6 +27,8 @@ h3 {
 p {
 	text-align: justify;
 	line-height: 1.4em;
+	margin-left: 1vw;
+	margin-right: 1vw;
 }
 
 a {
@@ -194,6 +196,12 @@ footer > div > p {
 
 #logo-centrale {
 	width: 20vw;
+}
+
+#rowing {
+	width: 10vw;
+	border-radius: 30px;
+	margin: 1vw;
 }
 
 #error {
