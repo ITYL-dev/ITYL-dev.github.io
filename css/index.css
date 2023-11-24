@@ -20,7 +20,7 @@ h2 {
 
 h3 {
 	font-size: large;
-	text-align: center;
+	text-align: start;
 	line-height: 1.4em;
 }
 
@@ -37,7 +37,7 @@ a {
 }
 
 ul {
-	padding-left: 3vw;
+	padding-left: 1vw;
 }
 
 li {
@@ -90,7 +90,7 @@ main > div {
 	border: 1px solid #f1f1f1;
 	border-radius: 30px;
 	display: flex;
-	justify-content: space-between;
+	justify-content: start;
 	align-items: center;
 	margin-bottom: 4vh;
 	padding-left: 1vw;
@@ -111,7 +111,7 @@ main > div > h2 {
 }
 
 main > div > h2 + div > h3 {
-	margin-left: 2vw;
+	margin-left: 1vw;
 }
 
 button {
@@ -202,6 +202,10 @@ footer > div > p {
 	width: 10vw;
 	border-radius: 30px;
 	margin: 1vw;
+}
+
+#resume {
+	justify-content: space-between;
 }
 
 #error {
